@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>نموذج التسجيل</title>
+  <title>طلب المنتج</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +14,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
       background: #fff;
       padding: 25px;
@@ -27,14 +28,15 @@
     }
 
     label {
-      display: block;
-      margin-bottom: 5px;
       font-weight: bold;
+      margin: 10px 0 5px;
+      display: block;
     }
 
     input[type="text"],
     input[type="email"],
-    select {
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -42,22 +44,22 @@
       margin-bottom: 15px;
     }
 
-    .grid-two {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
     .radio-group {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    input[type="radio"] {
+    .radio-group input {
       margin-left: 5px;
     }
 
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
     input[type="submit"] {
-      background-color: #4CAF50;
+      background-color: #000;
       color: white;
       padding: 12px;
       width: 100%;
@@ -68,81 +70,105 @@
     }
 
     input[type="submit"]:hover {
-      background-color: #45a049;
+      background-color: #444;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <form method="post" action="https://script.google.com/macros/s/AKfycbyiDzj7zKrrJeg34aEj4gC9amR0BXsOjsZjLCnaFyBOa-p8TLzn3A6l_VK1Qi2FZ2oP5Q/exec" name="contact-form">
-      <h4>نموذج التسجيل</h4>
+    <form method="post" action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" name="order-form">
+      <h4>نموذج طلب المنتج</h4>
+
+      <!-- اللون -->
+      <label>اللون:</label>
+      <div class="radio-group">
+        <input type="radio" name="color" value="بني" required> بني
+        <input type="radio" name="color" value="أبيض"> أبيض
+      </div>
 
       <!-- المقاس -->
       <label for="size">المقاس:</label>
       <select id="size" name="size" required>
         <option value="">اختر المقاس</option>
-        <option value="S">صغير (S)</option>
-        <option value="M">متوسط (M)</option>
-        <option value="L">كبير (L)</option>
-        <option value="XL">كبير جدًا (XL)</option>
+        <option value="39">39</option>
+        <option value="40">40</option>
+        <option value="41">41</option>
+        <option value="42">42</option>
       </select>
 
-      <!-- نوع المنتج -->
-      <label>نوع المنتج:</label>
+      <!-- وسيلة التوصيل -->
+      <label>طريقة التوصيل:</label>
       <div class="radio-group">
-        <input type="radio" id="shirt" name="productType" value="قميص" required>
-        <label for="shirt">قميص</label>
-        <input type="radio" id="jacket" name="productType" value="سترة">
-        <label for="jacket">سترة</label>
+        <input type="radio" name="delivery" value="عادي" required> توصيل عادي - 350 دج
+        <input type="radio" name="delivery" value="سريع"> توصيل سريع - 700 دج
       </div>
 
-      <!-- الحقول الأخرى في صفين -->
+      <!-- وسيلة الدفع -->
+      <label>طريقة الدفع:</label>
+      <div class="radio-group">
+        <input type="radio" name="payment" value="عند الاستلام" required> عند الاستلام
+        <input type="radio" name="payment" value="تحويل بريدي"> تحويل بريدي
+      </div>
+
+      <!-- حقل إضافي يظهر فقط في حالة الدفع المسبق -->
+      <div id="transfer-info" class="hidden">
+        <label for="transfer-code">أدخل رقم وصل التحويل:</label>
+        <input type="text" name="transfer-code" placeholder="مثال: CCP123456" />
+      </div>
+
+      <!-- بيانات العميل -->
       <div class="grid-two">
         <div>
-          <label for="your-name">الاسم الكامل:</label>
-          <input type="text" name="your-name" placeholder="الاسم الكامل" required>
+          <label>الاسم الكامل:</label>
+          <input type="text" name="fullname" required>
         </div>
 
         <div>
-          <label for="your-number">رقم الهاتف:</label>
-          <input type="text" name="your-number" placeholder="رقم الهاتف" required>
+          <label>رقم الهاتف:</label>
+          <input type="text" name="phone" required>
         </div>
-
-        <div>
-          <label for="your-email">البريد الإلكتروني:</label>
-          <input type="email" name="your-email" placeholder="البريد الإلكتروني" required>
-        </div>
-
-        <!-- خانة إضافية فارغة للحفاظ على التناسق -->
-        <div></div>
       </div>
 
-      <input type="submit" value="إرسال">
+      <label>عنوان التوصيل:</label>
+      <textarea name="address" rows="3" required></textarea>
+
+      <input type="submit" value="اطلب الآن">
     </form>
+
     <script>
-        document.querySelector("form[name='contact-form']").addEventListener("submit", function(e) {
-          e.preventDefault();
-      
-          const form = e.target;
-          const data = new FormData(form);
-      
-          fetch(form.action, {
-            method: "POST",
-            body: data
-          })
-          .then(response => {
-            if (response.ok) {
-              window.location.href = "https://sites.google.com/view/good-product-dz/%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B4%D9%83%D8%B1";
-            } else {
-              alert("حدث خطأ أثناء الإرسال. حاول مرة أخرى.");
-            }
-          })
-          .catch(error => {
-            console.error("خطأ:", error);
-            alert("حدث خطأ أثناء الإرسال.");
-          });
+      const form = document.forms["order-form"];
+      const transferSection = document.getElementById("transfer-info");
+
+      form.payment.forEach(radio => {
+        radio.addEventListener("change", () => {
+          transferSection.classList.toggle("hidden", radio.value !== "تحويل بريدي" || !radio.checked);
         });
-      </script>
+      });
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        fetch(form.action, {
+          method: "POST",
+          body: data
+        })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = "https://sites.google.com/view/good-product-dz/شكرا";
+          } else {
+            alert("فشل الإرسال، حاول مجددًا.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("حدث خطأ في الإرسال.");
+        });
+      });
+    </script>
   </div>
 </body>
 </html>
